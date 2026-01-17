@@ -2,8 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>News Banner Square</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>News Banner</title>
 
   <style>
     * {
@@ -16,125 +15,101 @@
     body {
       width: 1080px;
       height: 1080px;
-      background: #020617;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .banner {
-      position: relative;
-      width: 100%;
-      height: 100%;
+      background: #000;
       overflow: hidden;
     }
 
-    #image {
-      position: absolute;
-      inset: 0;
+    .container {
+      position: relative;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      z-index: 1;
+      background: #000;
+    }
+
+    .bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.45);
     }
 
     .overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.9),
-        rgba(0,0,0,0.3)
-      );
-      z-index: 2;
+      padding: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      color: #fff;
     }
 
-    .content {
-      position: absolute;
-      bottom: 80px;
-      left: 80px;
-      right: 80px;
-      z-index: 3;
-    }
-
-    #headline {
+    .headline {
       font-size: 56px;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 24px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 20px;
     }
 
-    #source {
+    .source {
       font-size: 22px;
       opacity: 0.85;
     }
 
-    .fallback {
-      background: #020617;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 60px;
+    .logo {
+      position: absolute;
+      top: 60px;
+      right: 60px;
+      max-width: 160px;
+      max-height: 80px;
+      object-fit: contain;
     }
   </style>
 </head>
 
 <body>
-  <div class="banner">
+  <div class="container">
+    <div class="bg" id="bg"></div>
 
-    <!-- IMAGE -->
-    <img
-      id="image"
-      src=""
-      alt="News Image"
-      onerror="handleImageError()"
-    />
+    <img id="logo" class="logo" style="display:none" />
 
-    <div class="overlay"></div>
-
-    <!-- TEXT CONTENT -->
-    <div class="content">
-      <h1 id="headline">Judul tidak tersedia</h1>
-      <div id="source">Sumber tidak tersedia</div>
+    <div class="overlay">
+      <div id="headline" class="headline">Judul tidak tersedia</div>
+      <div id="source" class="source"></div>
     </div>
-
   </div>
 
   <script>
-    // Ambil parameter URL dengan aman
-    function getParam(name, fallback) {
-      const params = new URLSearchParams(window.location.search);
-      const value = params.get(name);
-      return value
-        ? decodeURIComponent(value.replace(/\+/g, ' '))
-        : fallback;
+    const params = new URLSearchParams(window.location.search);
+
+    const headline = params.get("headline");
+    const image = params.get("image");
+    const source = params.get("source");
+    const logo = params.get("logo");
+
+    if (headline) {
+      document.getElementById("headline").innerText = headline;
     }
 
-    // Data
-    const headline = getParam("headline", "Judul tidak tersedia");
-    const image = getParam("image", "");
-    const source = getParam("source", "Sumber tidak tersedia");
+    if (source) {
+      document.getElementById("source").innerText = source;
+    }
 
-    // Set teks
-    document.getElementById("headline").innerText = headline;
-    document.getElementById("source").innerText = source;
-
-    // Set gambar
     if (image) {
-      document.getElementById("image").src = image;
-    } else {
-      handleImageError();
+      document.getElementById("bg").style.backgroundImage = `url('${image}')`;
     }
 
-    // Fallback jika gambar gagal
-    function handleImageError() {
-      const img = document.getElementById("image");
-      img.style.display = "none";
-      document.body.classList.add("fallback");
+    if (logo) {
+      const logoEl = document.getElementById("logo");
+      logoEl.src = logo;
+      logoEl.style.display = "block";
+      logoEl.onerror = () => {
+        console.log("Logo gagal dimuat:", logo);
+        logoEl.style.display = "none";
+      };
     }
   </script>
 </body>
 </html>
+
 
