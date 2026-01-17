@@ -1,25 +1,148 @@
-<script>
-  const params = new URLSearchParams(window.location.search);
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>News Banner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  const headline =
-    params.get("headline") ||
-    "Judul tidak tersedia";
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-  const image =
-    params.get("image") ||
-    "https://via.placeholder.com/1200x630?text=No+Image";
+    body {
+      width: 1200px;
+      height: 630px;
+      background: #0f172a;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  const source =
-    params.get("source") ||
-    "";
+    .banner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
 
-  document.getElementById("headline").innerText = decodeURIComponent(headline);
+    #image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
 
-  const imgEl = document.getElementById("image");
-  imgEl.src = decodeURIComponent(image);
-  imgEl.onerror = () => {
-    imgEl.src = "https://via.placeholder.com/1200x630?text=Image+Error";
-  };
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.85),
+        rgba(0,0,0,0.3)
+      );
+      z-index: 2;
+    }
 
-  document.getElementById("source").innerText = decodeURIComponent(source);
-</script>
+    .content {
+      position: absolute;
+      bottom: 60px;
+      left: 60px;
+      right: 60px;
+      z-index: 3;
+    }
+
+    #headline {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    #source {
+      font-size: 20px;
+      opacity: 0.85;
+    }
+
+    .fallback {
+      background: #020617;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="banner">
+
+    <!-- IMAGE -->
+    <img
+      id="image"
+      src=""
+      alt="News Banner Image"
+      onerror="handleImageError()"
+    />
+
+    <div class="overlay"></div>
+
+    <!-- CONTENT -->
+    <div class="content">
+      <h1 id="headline">Judul tidak tersedia</h1>
+      <div id="source">Sumber tidak tersedia</div>
+    </div>
+
+  </div>
+
+  <script>
+    /**
+     * SAFE PARAM READER
+     */
+    function getParam(name, fallback) {
+      const params = new URLSearchParams(window.location.search);
+      const value = params.get(name);
+      return value ? decodeURIComponent(value.replace(/\+/g, ' ')) : fallback;
+    }
+
+    /**
+     * GET DATA
+     */
+    const headline = getParam("headline", "Judul tidak tersedia");
+    const image = getParam("image", "");
+    const source = getParam("source", "Sumber tidak tersedia");
+
+    /**
+     * APPLY TEXT
+     */
+    document.getElementById("headline").innerText = headline;
+    document.getElementById("source").innerText = source;
+
+    /**
+     * APPLY IMAGE
+     */
+    if (image) {
+      document.getElementById("image").src = image;
+    } else {
+      handleImageError();
+    }
+
+    /**
+     * IMAGE FALLBACK
+     */
+    function handleImageError() {
+      const img = document.getElementById("image");
+      img.style.display = "none";
+      document.body.classList.add("fallback");
+    }
+  </script>
+</body>
+</html>
