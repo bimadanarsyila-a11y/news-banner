@@ -1,135 +1,159 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=1080, height=1080" />
-<title>Politrik Channel Banner</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1080, height=1080, initial-scale=1.0"/>
+  <title>Politrik Channel - Instagram Banner</title>
 
-<style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-html, body {
-  width: 1080px;
-  height: 1080px;
-  background: #000;
-  overflow: hidden;
-}
+    body {
+      width: 1080px;
+      height: 1080px;
+      background-color: #0b0b0b;
+      overflow: hidden;
+    }
 
-.banner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-image: url("https://via.placeholder.com/1080");
-  background-size: cover;
-  background-position: center;
-}
+    .banner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-color: #111;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
 
-/* overlay utama */
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-}
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.9)
+      );
+      z-index: 1;
+    }
 
-/* panel bawah PAKSA KONTRAS */
-.panel {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 45%;
-  background: linear-gradient(
-    to top,
-    rgba(0,0,0,0.95),
-    rgba(0,0,0,0)
-  );
-}
+    .logo {
+      position: absolute;
+      top: 36px;
+      left: 36px;
+      height: 64px;
+      z-index: 3;
+    }
 
-/* logo */
-.logo {
-  position: absolute;
-  top: 36px;
-  left: 36px;
-  height: 64px;
-  z-index: 3;
-}
+    .content {
+      position: absolute;
+      bottom: 90px;
+      left: 80px;
+      right: 80px;
+      z-index: 3;
+    }
 
-/* konten */
-.content {
-  position: absolute;
-  bottom: 90px;
-  left: 80px;
-  right: 80px;
-  z-index: 3;
-}
+    .accent-line {
+      width: 90px;
+      height: 4px;
+      background-color: #D4AF37;
+      margin-bottom: 18px;
+    }
 
-.line {
-  width: 90px;
-  height: 4px;
-  background: #D4AF37;
-  margin-bottom: 18px;
-}
+    .headline {
+      color: #D4AF37;
+      font-size: 44px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 22px;
+      max-height: 3.75em;
+      overflow: hidden;
+    }
 
-.headline {
-  color: #D4AF37;
-  font-size: 44px;
-  font-weight: 800;
-  line-height: 1.25;
-  margin-bottom: 22px;
-  text-shadow: 0 4px 12px rgba(0,0,0,.9);
-}
-
-.source {
-  color: #eee;
-  font-size: 18px;
-  letter-spacing: .5px;
-}
-</style>
+    .source {
+      color: #e0e0e0;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="banner" id="banner">
-  <div class="overlay"></div>
-  <div class="panel"></div>
+  <div class="banner" id="banner">
+    <div class="overlay"></div>
 
-  <!-- DEFAULT: SELALU ADA -->
-  <img class="logo" id="logo"
-       src="https://ministerial-ivory-aksoijrg68.edgeone.app/politrik.jpeg">
+    <img
+      id="logo"
+      class="logo"
+      src="https://ministerial-ivory-aksoijrg68.edgeone.app/politrik.jpeg"
+      alt="Politrik Channel Logo"
+      onerror="this.style.display='none'"
+    />
 
-  <div class="content">
-    <div class="line"></div>
-    <div class="headline" id="headline">
-      Isu Sosial & Politik Terkini Indonesia
-    </div>
-    <div class="source" id="source">
-      Politrik Channel
+    <div class="content">
+      <div class="accent-line"></div>
+      <div id="headline" class="headline">Judul Berita</div>
+      <div id="source" class="source">Sumber Media</div>
     </div>
   </div>
-</div>
 
-<script>
-(function(){
-  try {
-    const p = new URLSearchParams(window.location.search);
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
 
-    const h = p.get("headline");
-    const i = p.get("image");
-    const s = p.get("source");
-    const l = p.get("logo");
+      function safeText(value, fallback) {
+        if (!value) return fallback;
+        return value
+          .replace(/<\/?[^>]+(>|$)/g, "")
+          .replace(/["']/g, "")
+          .trim();
+      }
 
-    if (h) document.getElementById("headline").textContent = h;
-    if (s) document.getElementById("source").textContent = s;
-    if (i) document.getElementById("banner").style.backgroundImage = `url("${i}")`;
-    if (l) document.getElementById("logo").src = l;
-  } catch(e){}
-})();
-</script>
+      const headline = safeText(
+        params.get("headline"),
+        "Isu Sosial dan Politik Terkini"
+      );
+
+      const source = safeText(
+        params.get("source"),
+        "Politrik Channel"
+      );
+
+      let imageParam = params.get("image");
+
+      try {
+        if (imageParam) {
+          imageParam = decodeURIComponent(imageParam);
+        }
+      } catch (e) {
+        imageParam = null;
+      }
+
+      const fallbackImage = "https://picsum.photos/1080";
+
+      document.getElementById("headline").innerText = headline;
+      document.getElementById("source").innerText = source;
+
+      const banner = document.getElementById("banner");
+
+      const img = new Image();
+      img.onload = function () {
+        banner.style.backgroundImage = 'url("' + imageParam + '")';
+      };
+      img.onerror = function () {
+        banner.style.backgroundImage = 'url("' + fallbackImage + '")';
+      };
+
+      img.src = imageParam && imageParam.startsWith("http")
+        ? imageParam
+        : fallbackImage;
+    })();
+  </script>
 
 </body>
 </html>
