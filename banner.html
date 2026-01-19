@@ -2,7 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>News Banner</title>
+  <meta name="viewport" content="width=1200, height=630, initial-scale=1.0"/>
+  <title>Politrik Channel Banner</title>
 
   <style>
     * {
@@ -13,103 +14,110 @@
     }
 
     body {
-      width: 1080px;
-      height: 1080px;
-      background: #000;
+      width: 1200px;
+      height: 630px;
+      background-color: #0b0b0b;
       overflow: hidden;
     }
 
-    .container {
+    .banner {
       position: relative;
       width: 100%;
       height: 100%;
-      background: #000;
-    }
-
-    .bg {
-      position: absolute;
-      inset: 0;
       background-size: cover;
       background-position: center;
-      filter: brightness(0.45);
     }
 
+    /* Overlay gelap agar teks terbaca */
     .overlay {
       position: absolute;
       inset: 0;
-      padding: 80px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      color: #fff;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.65),
+        rgba(0,0,0,0.85)
+      );
+    }
+
+    /* Logo */
+    .logo {
+      position: absolute;
+      top: 28px;
+      left: 28px;
+      height: 56px;
+      z-index: 2;
+    }
+
+    /* Konten teks */
+    .content {
+      position: absolute;
+      bottom: 60px;
+      left: 60px;
+      right: 60px;
+      z-index: 2;
     }
 
     .headline {
-      font-size: 56px;
-      font-weight: 700;
-      line-height: 1.25;
+      color: #D4AF37; /* emas */
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.2;
       margin-bottom: 20px;
+      max-height: 3.6em;
+      overflow: hidden;
     }
 
     .source {
-      font-size: 22px;
-      opacity: 0.85;
+      color: #e0e0e0;
+      font-size: 18px;
+      letter-spacing: 0.5px;
     }
 
-    .logo {
-      position: absolute;
-      top: 60px;
-      right: 60px;
-      max-width: 160px;
-      max-height: 80px;
-      object-fit: contain;
+    /* Garis aksen emas */
+    .accent-line {
+      width: 80px;
+      height: 4px;
+      background-color: #D4AF37;
+      margin-bottom: 16px;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="bg" id="bg"></div>
 
-    <img id="logo" class="logo" style="display:none" />
+  <div class="banner" id="banner">
+    <div class="overlay"></div>
 
-    <div class="overlay">
-      <div id="headline" class="headline">Judul tidak tersedia</div>
-      <div id="source" class="source"></div>
+    <img id="logo" class="logo" alt="Politrik Channel Logo"/>
+
+    <div class="content">
+      <div class="accent-line"></div>
+      <div id="headline" class="headline">Judul Berita</div>
+      <div id="source" class="source">Sumber Media</div>
     </div>
   </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
 
-    const headline = params.get("headline");
-    const image = params.get("image");
-    const source = params.get("source");
-    const logo = params.get("logo");
+    const headline = params.get("headline") || "Isu Sosial dan Politik Terkini";
+    const image = params.get("image") || "https://via.placeholder.com/1200x630";
+    const source = params.get("source") || "Politrik Channel";
+    const logo = params.get("logo") || "";
 
-    if (headline) {
-      document.getElementById("headline").innerText = headline;
-    }
+    document.getElementById("headline").innerText = headline;
+    document.getElementById("source").innerText = source;
 
-    if (source) {
-      document.getElementById("source").innerText = source;
-    }
-
-    if (image) {
-      document.getElementById("bg").style.backgroundImage = `url('${image}')`;
-    }
+    const banner = document.getElementById("banner");
+    banner.style.backgroundImage = `url('${image}')`;
 
     if (logo) {
-      const logoEl = document.getElementById("logo");
-      logoEl.src = logo;
-      logoEl.style.display = "block";
-      logoEl.onerror = () => {
-        console.log("Logo gagal dimuat:", logo);
-        logoEl.style.display = "none";
-      };
+      document.getElementById("logo").src = logo;
+    } else {
+      document.getElementById("logo").style.display = "none";
     }
   </script>
+
 </body>
 </html>
-
 
