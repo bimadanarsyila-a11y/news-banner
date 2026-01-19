@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=1200, height=630, initial-scale=1.0"/>
-  <title>Politrik Channel Banner</title>
+  <meta name="viewport" content="width=1080, height=1080, initial-scale=1.0"/>
+  <title>Politrik Channel - Instagram Banner</title>
 
   <style>
     * {
@@ -14,8 +14,8 @@
     }
 
     body {
-      width: 1200px;
-      height: 630px;
+      width: 1080px;
+      height: 1080px;
       background-color: #0b0b0b;
       overflow: hidden;
     }
@@ -34,7 +34,7 @@
       inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.65),
+        rgba(0,0,0,0.55),
         rgba(0,0,0,0.85)
       );
     }
@@ -42,28 +42,28 @@
     /* Logo */
     .logo {
       position: absolute;
-      top: 28px;
-      left: 28px;
-      height: 56px;
+      top: 36px;
+      left: 36px;
+      height: 64px;
       z-index: 2;
     }
 
     /* Konten teks */
     .content {
       position: absolute;
-      bottom: 60px;
-      left: 60px;
-      right: 60px;
+      bottom: 90px;
+      left: 80px;
+      right: 80px;
       z-index: 2;
     }
 
     .headline {
       color: #D4AF37; /* emas */
-      font-size: 48px;
+      font-size: 44px;
       font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 20px;
-      max-height: 3.6em;
+      line-height: 1.25;
+      margin-bottom: 22px;
+      max-height: 3.75em; /* aman max 3 baris */
       overflow: hidden;
     }
 
@@ -75,10 +75,10 @@
 
     /* Garis aksen emas */
     .accent-line {
-      width: 80px;
+      width: 90px;
       height: 4px;
       background-color: #D4AF37;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
   </style>
 </head>
@@ -101,7 +101,7 @@
     const params = new URLSearchParams(window.location.search);
 
     const headline = params.get("headline") || "Isu Sosial dan Politik Terkini";
-    const image = params.get("image") || "https://via.placeholder.com/1200x630";
+    const image = params.get("image") || "https://via.placeholder.com/1080x1080";
     const source = params.get("source") || "Politrik Channel";
     const logo = params.get("logo") || "";
 
@@ -120,4 +120,3 @@
 
 </body>
 </html>
-
