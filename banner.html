@@ -2,7 +2,11 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=1080, height=1080, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- Viewport AMAN untuk headless browser -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Politrik Channel - Instagram Banner</title>
 
   <style>
@@ -24,8 +28,10 @@
       position: relative;
       width: 100%;
       height: 100%;
+      background-color: #111;
       background-size: cover;
       background-position: center;
+      background-repeat: no-repeat;
     }
 
     /* Overlay gelap agar teks terbaca */
@@ -34,9 +40,10 @@
       inset: 0;
       background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.55),
+        rgba(0,0,0,0.45),
         rgba(0,0,0,0.85)
       );
+      z-index: 1;
     }
 
     /* Logo */
@@ -46,6 +53,7 @@
       left: 36px;
       height: 64px;
       z-index: 2;
+      display: none;
     }
 
     /* Konten teks */
@@ -58,12 +66,16 @@
     }
 
     .headline {
-      color: #D4AF37; /* emas */
+      color: #D4AF37;
       font-size: 44px;
       font-weight: 800;
       line-height: 1.25;
       margin-bottom: 22px;
-      max-height: 3.75em; /* aman max 3 baris */
+
+      /* Anti teks kepanjangan */
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
@@ -73,7 +85,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Garis aksen emas */
     .accent-line {
       width: 90px;
       height: 4px;
@@ -88,34 +99,72 @@
   <div class="banner" id="banner">
     <div class="overlay"></div>
 
-    <img id="logo" class="logo" alt="Politrik Channel Logo"/>
+    <img id="logo" class="logo" alt="Politrik Channel Logo" />
 
     <div class="content">
       <div class="accent-line"></div>
-      <div id="headline" class="headline">Judul Berita</div>
-      <div id="source" class="source">Sumber Media</div>
+      <div id="headline" class="headline">Isu Sosial dan Politik Terkini</div>
+      <div id="source" class="source">Politrik Channel</div>
     </div>
   </div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
+    (function () {
+      const params = new URLSearchParams(window.location.search);
 
-    const headline = params.get("headline") || "Isu Sosial dan Politik Terkini";
-    const image = params.get("image") || "https://via.placeholder.com/1080x1080";
-    const source = params.get("source") || "Politrik Channel";
-    const logo = params.get("logo") || "";
+      /* Sanitasi teks (ANTI ERROR QUERY) */
+      function safeText(value, fallback) {
+        if (!value) return fallback;
+        return value
+          .replace(/<\/?[^>]+(>|$)/g, "")
+          .replace(/["']/g, "")
+          .trim();
+      }
 
-    document.getElementById("headline").innerText = headline;
-    document.getElementById("source").innerText = source;
+      const headline = safeText(
+        params.get("headline"),
+        "Isu Sosial dan Politik Terkini"
+      );
 
-    const banner = document.getElementById("banner");
-    banner.style.backgroundImage = `url('${image}')`;
+      const source = safeText(
+        params.get("source"),
+        "Politrik Channel"
+      );
 
-    if (logo) {
-      document.getElementById("logo").src = logo;
-    } else {
-      document.getElementById("logo").style.display = "none";
-    }
+      const image = params.get("image") || "";
+      const logo  = params.get("logo") || "";
+
+      const banner = document.getElementById("banner");
+      const logoEl = document.getElementById("logo");
+
+      document.getElementById("headline").innerText = headline;
+      document.getElementById("source").innerText = source;
+
+      /* Background image dengan fallback (ANTI BLANK) */
+      if (image.startsWith("http")) {
+        const bgTest = new Image();
+        bgTest.onload = function () {
+          banner.style.backgroundImage = `url("${image}")`;
+        };
+        bgTest.onerror = function () {
+          banner.style.backgroundImage = 'url("https://picsum.photos/1080")';
+        };
+        bgTest.src = image;
+      } else {
+        banner.style.backgroundImage = 'url("https://picsum.photos/1080")';
+      }
+
+      /* Logo aman */
+      if (logo.startsWith("http")) {
+        logoEl.src = logo;
+        logoEl.onload = function () {
+          logoEl.style.display = "block";
+        };
+        logoEl.onerror = function () {
+          logoEl.style.display = "none";
+        };
+      }
+    })();
   </script>
 
 </body>
